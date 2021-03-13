@@ -4,6 +4,7 @@
     <ResourceDictionary>
         <converters:NullToCollapsedConverter x:Key="NullToCollapsedConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:NotNullToBoolConverter x:Key="NotNullToBoolConverter"/>
         <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:PackageDependencyAnalyzer.ViewModel" />
     </ResourceDictionary>
   </Application.Resources>

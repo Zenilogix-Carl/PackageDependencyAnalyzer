@@ -5,10 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommonServiceLocator;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
+using PackageDependencyAnalysis.Analyzers;
 using PackageDependencyAnalysis.Model;
-using PackageDependencyAnalysis.Processors;
-using PackageDependencyAnalyzer.Messages;
 using PackageDependencyAnalyzer.Properties;
 
 namespace PackageDependencyAnalyzer.ViewModel
@@ -70,7 +68,7 @@ namespace PackageDependencyAnalyzer.ViewModel
                 RecentFiles = new ObservableCollection<string>((Settings.Default.RecentFiles ?? string.Empty).Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
             }
 
-            Messenger.Default.Register<ProjectModified>(this, message => HandleProjectFileChange(message.Project));
+            // Messenger.Default.Register<ProjectModified>(this, message => HandleProjectFileChange(message.Project));
         }
 
         private async void HandleProjectFileChange(IProject project)
@@ -101,21 +99,18 @@ namespace PackageDependencyAnalyzer.ViewModel
                 PackageCacheViewModel.Clear();
                 LoggerViewModel.Clear();
                 PackageCacheViewModel.Issues = string.Empty;
-                var packageCacheProcessor = new PackageCacheProcessor(name => new PackageViewModel(name),
-                    file => new PackageVersionViewModel(file), PackageCacheViewModel, LoggerViewModel);
-                var projectFileProcessor = new ProjectFileProcessor(file => new ProjectViewModel { AbsolutePath = file },
-                    name => new PackageViewModel(name), SolutionViewModel, 
-                    packageCacheProcessor, new AppConfigFileProcessor(), new PackagesConfigFileProcessor(),
-                    PackageCacheViewModel, LoggerViewModel);
 
-                packageCacheProcessor.ProcessCaches(SolutionFile);
-                new SolutionFileProcessor(SolutionViewModel, projectFileProcessor, LoggerViewModel).LoadFromFile(
-                    SolutionFile);
+                PackageCacheViewModel.LoadForSolution(SolutionFile, s => s.StartsWith("net") || s.Contains("portable"));
+
+                SolutionViewModel.LoadFromFile(SolutionFile);
+
                 SolutionViewModel.NamespaceViewModel.Merge();
-                projectFileProcessor.ResolvePackageReferences();
-                PackageCacheViewModel.ReferencedPackages = packageCacheProcessor.GetReferencedPackages();
 
-                PackageCacheViewModel.Issues = string.Join("\r\n", packageCacheProcessor.ScanForIssues());
+                var resolver = new ReferenceResolver(SolutionViewModel, PackageCacheViewModel, LoggerViewModel.Warning);
+                resolver.ResolveAllReferences();
+                PackageCacheViewModel.ReferencedPackages = DependencyAnalyzer.GetReferencedPackages(PackageCacheViewModel);
+
+                PackageCacheViewModel.Issues = string.Join("\r\n", IssueScanner.Scan(PackageCacheViewModel));
 
                 IsBusy = false;
             });

@@ -57,6 +57,12 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
     </Reference>
@@ -124,32 +130,38 @@
     <Compile Include="..\PackageDependencyAnalysis\Model\PlatformDependencies.cs">
       <Link>Model\PlatformDependencies.cs</Link>
     </Compile>
-    <Compile Include="..\PackageDependencyAnalysis\Processors\AppConfigFileProcessor.cs">
-      <Link>Processors\AppConfigFileProcessor.cs</Link>
-    </Compile>
-    <Compile Include="..\PackageDependencyAnalysis\Processors\ExtensionMethods.cs">
-      <Link>Processors\ExtensionMethods.cs</Link>
-    </Compile>
-    <Compile Include="..\PackageDependencyAnalysis\Processors\ILogger.cs">
-      <Link>Processors\ILogger.cs</Link>
-    </Compile>
-    <Compile Include="..\PackageDependencyAnalysis\Processors\PackageCacheProcessor.cs">
-      <Link>Processors\PackageCacheProcessor.cs</Link>
-    </Compile>
-    <Compile Include="..\PackageDependencyAnalysis\Processors\PackagesConfigFileProcessor.cs">
-      <Link>Processors\PackagesConfigFileProcessor.cs</Link>
-    </Compile>
-    <Compile Include="..\PackageDependencyAnalysis\Processors\ProjectFileProcessor.cs">
-      <Link>Processors\ProjectFileProcessor.cs</Link>
-    </Compile>
-    <Compile Include="..\PackageDependencyAnalysis\Processors\SolutionFileProcessor.cs">
-      <Link>Processors\SolutionFileProcessor.cs</Link>
-    </Compile>
+    <Compile Include="Analyzers\DependencyAnalyzer.cs" />
+    <Compile Include="Analyzers\ExtensionMethods.cs" />
+    <Compile Include="Analyzers\ImpactAnalyzer.cs" />
+    <Compile Include="Analyzers\IssueScanner.cs" />
+    <Compile Include="Analyzers\ProjectBuilder.cs" />
+    <Compile Include="Analyzers\ReferenceResolver.cs" />
+    <Compile Include="ContextObjects\AppConfigAssemblyRedirectContext.cs" />
+    <Compile Include="ContextObjects\AppConfigContext.cs" />
+    <Compile Include="ContextObjects\IAssemblyDetailsContext.cs" />
+    <Compile Include="ContextObjects\IAssemblyReferenceContext.cs" />
+    <Compile Include="ContextObjects\NuSpecDependencyGroup.cs" />
+    <Compile Include="ContextObjects\NuSpecReference.cs" />
+    <Compile Include="ContextObjects\NuSpecReferencesContext.cs" />
+    <Compile Include="ContextObjects\PackageCacheContext.cs" />
+    <Compile Include="ContextObjects\PackageContext.cs" />
+    <Compile Include="ContextObjects\PackageReferenceContext.cs" />
+    <Compile Include="ContextObjects\PackagesConfigContext.cs" />
+    <Compile Include="ContextObjects\PackagesConfigPackageContext.cs" />
+    <Compile Include="ContextObjects\ProjectContext.cs" />
+    <Compile Include="ContextObjects\ProjectItemType.cs" />
+    <Compile Include="ContextObjects\ProjectReferenceContext.cs" />
+    <Compile Include="ContextObjects\ReferenceContext.cs" />
+    <Compile Include="ContextObjects\ReferenceContextBase.cs" />
+    <Compile Include="ContextObjects\SolutionContext.cs" />
+    <Compile Include="Model\AssemblyInfo.cs" />
+    <Compile Include="Model\AssemblyReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

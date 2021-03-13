@@ -11,6 +11,7 @@ namespace TestHarness.Models
         public string AbsolutePath { get; set; }
         public Version Version { get; set; }
         public ICollection<IProject> Projects { get; } = new ObservableCollection<IProject>();
+        public ICollection<IProject> Dependencies { get; }
 
         public IDictionary<string, PackageReference> PackageReferenceDictionary { get; } =
             new Dictionary<string, PackageReference>();

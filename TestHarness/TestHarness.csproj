@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PackageDependencyAnalysis\Processors\SolutionFileProcessor.cs">
+      <Link>Models\SolutionFileProcessor.cs</Link>
+    </Compile>
     <Compile Include="Logger.cs" />
     <Compile Include="Models\ObservableDictionary.cs" />
     <Compile Include="Models\Package.cs" />

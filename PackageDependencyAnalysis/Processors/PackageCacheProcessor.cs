@@ -43,7 +43,7 @@ namespace PackageDependencyAnalysis.Processors
             ResolvePackageReferences();
         }
 
-        private void ResolvePackageReferences()
+        public void ResolvePackageReferences()
         {
             foreach (var packageCachePackage in _packageCache.Packages)
             {

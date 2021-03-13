@@ -8,6 +8,7 @@ namespace PackageDependencyAnalysis.Model
         public Version OldVersionFrom { get; set; }
         public Version OldVersionTo { get; set; }
         public Version NewVersion { get; set; }
+        public int LineNumber { get; set; }
 
         public BindingRedirection Clone()
         {

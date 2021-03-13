@@ -3,11 +3,10 @@ using System.Text;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using PackageDependencyAnalysis.Model;
-using PackageDependencyAnalysis.Processors;
 
 namespace PackageDependencyAnalyzer.ViewModel
 {
-    public class LoggerViewModel : ViewModelBase, ILogger
+    public class LoggerViewModel : ViewModelBase //, ILogger
     {
         private readonly StringBuilder _sb = new StringBuilder(short.MaxValue, int.MaxValue);
         private int _counter;

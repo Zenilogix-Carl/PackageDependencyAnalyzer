@@ -14,7 +14,7 @@
             <ListView ItemsSource="{Binding SelectedPackage.PackageVersions}" SelectedItem="{Binding SelectedPackageVersion}">
                 <ListView.Resources>
                     <ContextMenu x:Key="PackageVersionContextMenu">
-                        <MenuItem Header="Open Repository" IsEnabled="{Binding IsValidRepositoryUrl}" Click="OpenRepository_OnClick"/>
+                        <MenuItem Header="Open Repository" Click="OpenRepository_OnClick"/>
                         <MenuItem Header="Find All References" Click="FindAllReferencesOnClick"/>
                     </ContextMenu>
                 </ListView.Resources>

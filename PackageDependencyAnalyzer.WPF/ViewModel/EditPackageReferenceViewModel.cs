@@ -34,58 +34,58 @@ namespace PackageDependencyAnalyzer.ViewModel
             }
         }
 
-        [DisplayName("Binding Redirection Min Version")]
-        public string BindingRedirectionFrom
-        {
-            get => _packageReference?.BindingRedirection?.OldVersionFrom?.ToString();
-            set
-            {
-                if (_packageReference.BindingRedirection != null)
-                {
-                    _packageReference.BindingRedirection.OldVersionFrom = new Version(value);
-                    Messenger.Default.Send(new BindingRedirectModified());
-                }
-            }
-        }
+        //[DisplayName("Binding Redirection Min Version")]
+        //public string BindingRedirectionFrom
+        //{
+        //    get => _packageReference?.BindingRedirection?.OldVersionFrom?.ToString();
+        //    set
+        //    {
+        //        if (_packageReference.BindingRedirection != null)
+        //        {
+        //            _packageReference.BindingRedirection.OldVersionFrom = new Version(value);
+        //            Messenger.Default.Send(new BindingRedirectModified());
+        //        }
+        //    }
+        //}
 
-        [DisplayName("Binding Redirection Max Version")]
-        public string BindingRedirectionTo
-        {
-            get => _packageReference?.BindingRedirection?.OldVersionTo?.ToString();
-            set
-            {
-                if (_packageReference.BindingRedirection != null)
-                {
-                    _packageReference.BindingRedirection.OldVersionTo = new Version(value);
-                    Messenger.Default.Send(new BindingRedirectModified());
-                }
-            }
-        }
+        //[DisplayName("Binding Redirection Max Version")]
+        //public string BindingRedirectionTo
+        //{
+        //    get => _packageReference?.BindingRedirection?.OldVersionTo?.ToString();
+        //    set
+        //    {
+        //        if (_packageReference.BindingRedirection != null)
+        //        {
+        //            _packageReference.BindingRedirection.OldVersionTo = new Version(value);
+        //            Messenger.Default.Send(new BindingRedirectModified());
+        //        }
+        //    }
+        //}
 
-        [DisplayName("Binding Redirection Target Version")]
-        public string BindingRedirectionTarget
-        {
-            get => _packageReference?.BindingRedirection?.NewVersion?.ToString();
-            set
-            {
-                if (_packageReference.BindingRedirection != null)
-                {
-                    _packageReference.BindingRedirection.NewVersion = new Version(value);
-                    Messenger.Default.Send(new BindingRedirectModified());
-                }
-            }
-        }
+        //[DisplayName("Binding Redirection Target Version")]
+        //public string BindingRedirectionTarget
+        //{
+        //    get => _packageReference?.BindingRedirection?.NewVersion?.ToString();
+        //    set
+        //    {
+        //        if (_packageReference.BindingRedirection != null)
+        //        {
+        //            _packageReference.BindingRedirection.NewVersion = new Version(value);
+        //            Messenger.Default.Send(new BindingRedirectModified());
+        //        }
+        //    }
+        //}
 
         //[Editor(typeof(DllFileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public string HintPath
-        {
-            get => _packageReference?.HintPath;
-            set
-            {
-                _packageReference.HintPath = string.IsNullOrWhiteSpace(value) ? null : value;
-                Messenger.Default.Send(new ProjectPackageReferenceModified());
-            }
-        }
+        //public string HintPath
+        //{
+        //    get => _packageReference?.HintPath;
+        //    set
+        //    {
+        //        _packageReference.HintPath = string.IsNullOrWhiteSpace(value) ? null : value;
+        //        Messenger.Default.Send(new ProjectPackageReferenceModified());
+        //    }
+        //}
 
         public EditPackageReferenceViewModel(IProject project, PackageReference packageReference)
         {

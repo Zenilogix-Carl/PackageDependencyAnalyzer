@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using GalaSoft.MvvmLight.Messaging;
+using PackageDependencyAnalysis.Analyzers;
 using PackageDependencyAnalysis.Model;
-using PackageDependencyAnalysis.Processors;
 
 namespace PackageDependencyAnalyzer.Controls
 {
@@ -25,19 +25,21 @@ namespace PackageDependencyAnalyzer.Controls
 
         }
 
-        private async void OnLoaded(object sender, RoutedEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
             Title =
                 $"{Package.Name} {(PackageVersion == null ? "" : PackageVersion.Version+" ")}- All Package References";
 
             if (PackageVersion != null)
             {
-                ListView.ItemsSource = PackageCacheProcessor.GetDependentPackages(PackageVersion);
+                ListView.ItemsSource = DependencyAnalyzer.GetDependentPackages(PackageVersion);
             }
             else
             {
-                ListView.ItemsSource = PackageCacheProcessor.GetDependentPackages(Package);
+                ListView.ItemsSource = DependencyAnalyzer.GetDependentPackages(Package);
             }
+
+            var x = ImpactAnalyzer.Analyze(PackageVersion);
         }
 
         private void PackageReferenceDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

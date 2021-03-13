@@ -35,6 +35,9 @@ namespace PackageDependencyAnalyzer.ViewModel
         public string PreReleaseSuffix { get; set; }
 
         [Browsable(false)]
+        public ICollection<AssemblyInfo> Assemblies { get; } = new ObservableCollection<AssemblyInfo>();
+
+        [Browsable(false)]
         public PlatformDependencies Dependencies { get; } = new PlatformDependencies();
         [Browsable(false)]
         public ICollection<IProject> ReferencingProjects { get; } = new ObservableCollection<IProject>();

@@ -16,6 +16,21 @@
                 <wf:PropertyGrid x:Name="PropertyGrid" x:FieldModifier="private" ToolbarVisible="False" PropertySort="NoSort"/>
             </WindowsFormsHost>
         </TabItem>
+        <TabItem Header="Assemblies">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Recognized Assemblies:" FontWeight="Bold"></TextBlock>
+                <ListView Grid.Column="0" Margin="0,20,0,0" ItemsSource="{Binding SelectedPackageVersion.Assemblies}" SelectedItem="{Binding SelectedAssemblyInfo}" DisplayMemberPath="Name">
+                </ListView>
+                <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext"/>
+                <TextBlock Grid.Column="2" Text="Targeted Frameworks:" FontWeight="Bold"></TextBlock>
+                <ListView Grid.Column="2" Margin="0,20,0,0" ItemsSource="{Binding SelectedAssemblyInfo.Frameworks}"></ListView>
+            </Grid>
+        </TabItem>
         <TabItem Header="Dependencies" ToolTip="Dependencies of the specific package version">
             <TreeView ItemsSource="{Binding SelectedPackageVersion.Dependencies}">
                 <TreeView.ItemTemplate>

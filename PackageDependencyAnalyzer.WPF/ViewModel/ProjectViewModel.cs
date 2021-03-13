@@ -12,6 +12,7 @@ namespace PackageDependencyAnalyzer.ViewModel
     public class ProjectViewModel : ViewModelBase, IProject
     {
         private PackageReference _selectedPackageReference;
+        private BindingRedirection _selectedBindingRedirection;
 
         [ReadOnly(true),
          DisplayName("Full Path Name")]
@@ -23,6 +24,12 @@ namespace PackageDependencyAnalyzer.ViewModel
 
         [Browsable(false)]
         public string AbsolutePath { get; set; }
+
+        [Browsable(false)]
+        public string PackagesConfigPath { get; set; }
+
+        [Browsable(false)]
+        public string AppConfigPath { get; set; }
 
         [ReadOnly(true)]
         public Version Version { get; set; }
@@ -38,9 +45,13 @@ namespace PackageDependencyAnalyzer.ViewModel
         [Browsable(false)]
         public ICollection<IProject> Projects { get; } = new ObservableCollection<IProject>();
         [Browsable(false)]
+        public ICollection<IProject> Dependencies { get; } = new ObservableCollection<IProject>();
+        [Browsable(false)]
         public IDictionary<string,PackageReference> PackageReferenceDictionary { get; } = new ObservableDictionary<string, PackageReference>{Dispatcher = Dispatcher.CurrentDispatcher};
         [Browsable(false)]
         public ICollection<PackageReference> PackageReferences => PackageReferenceDictionary.Values;
+        [Browsable(false)]
+        public ICollection<BindingRedirection> BindingRedirections { get; } = new ObservableCollection<BindingRedirection>();
 
         [Browsable(false)]
         public string EditMenuString => $"Edit Project {FileName}";
@@ -50,6 +61,13 @@ namespace PackageDependencyAnalyzer.ViewModel
         {
             get => _selectedPackageReference;
             set => Set(ref _selectedPackageReference, value);
+        }
+
+        [Browsable(false)]
+        public BindingRedirection SelectedBindingRedirection
+        {
+            get => _selectedBindingRedirection;
+            set => Set(ref _selectedBindingRedirection, value);
         }
 
         [Browsable(false)]

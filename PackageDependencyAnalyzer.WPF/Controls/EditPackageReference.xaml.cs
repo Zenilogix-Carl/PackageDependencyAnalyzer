@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using GalaSoft.MvvmLight.Messaging;
 using PackageDependencyAnalysis.Model;
-using PackageDependencyAnalysis.Processors;
 using PackageDependencyAnalyzer.Messages;
 using PackageDependencyAnalyzer.ViewModel;
 
@@ -48,27 +47,27 @@ namespace PackageDependencyAnalyzer.Controls
         {
             if (!string.IsNullOrEmpty(AppConfigXML.Text))
             {
-                AppConfigXML.Text = AppConfigFileProcessor.ReplacePackageReference(_appConfigDoc, _appConfigReference, _packageReferenceEdit);
+                //AppConfigXML.Text = AppConfigFileProcessor.ReplacePackageReference(_appConfigDoc, _appConfigReference, _packageReferenceEdit);
                 AppConfigCheck.IsChecked = true;
             }
         }
 
         private void OnProjectPackageReferenceModified(ProjectPackageReferenceModified obj)
         {
-            ProjectXML.Text = ProjectFileProcessor.ReplacePackageReference( _projectDoc, _projectReference, _packageReferenceEdit);
+            //ProjectXML.Text = ProjectFileProcessor.ReplacePackageReference( _projectDoc, _projectReference, _packageReferenceEdit);
             ProjectCheck.IsChecked = true;
             if (!string.IsNullOrEmpty(PackagesConfigXML.Text))
             {
-                PackagesConfigXML.Text = PackagesConfigFileProcessor.ReplacePackageReference(_packagesDoc, _packageReference, _packageReferenceEdit);
+                //PackagesConfigXML.Text = PackagesConfigFileProcessor.ReplacePackageReference(_packagesDoc, _packageReference, _packageReferenceEdit);
                 PackagesConfigCheck.IsChecked = true;
             }
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            OriginalProjectXML.Text = ProjectFileProcessor.GetPackageReference(Project, PackageReference, out _projectDoc, out _projectReference);
-            OriginalPackagesConfigXML.Text = PackagesConfigFileProcessor.GetPackageReference(Project, PackageReference, out _packagesDoc, out _packageReference);
-            OriginalAppConfigXML.Text = AppConfigFileProcessor.GetPackageReference(Project, PackageReference, out _appConfigDoc, out _appConfigReference);
+            //OriginalProjectXML.Text = ProjectFileProcessor.GetPackageReference(Project, PackageReference, out _projectDoc, out _projectReference);
+            //OriginalPackagesConfigXML.Text = PackagesConfigFileProcessor.GetPackageReference(Project, PackageReference, out _packagesDoc, out _packageReference);
+            //OriginalAppConfigXML.Text = AppConfigFileProcessor.GetPackageReference(Project, PackageReference, out _appConfigDoc, out _appConfigReference);
             ProjectXML.Text = OriginalProjectXML.Text;
             PackagesConfigXML.Text = OriginalPackagesConfigXML.Text;
             AppConfigXML.Text = OriginalAppConfigXML.Text;
@@ -102,15 +101,15 @@ namespace PackageDependencyAnalyzer.Controls
         {
             if (ProjectCheck.IsChecked == true)
             {
-                ProjectFileProcessor.Save(Project, _projectDoc);
+                //ProjectFileProcessor.Save(Project, _projectDoc);
             }
             if (PackagesConfigCheck.IsChecked == true)
             {
-                PackagesConfigFileProcessor.Save(Project, _packagesDoc);
+                //PackagesConfigFileProcessor.Save(Project, _packagesDoc);
             }
             if (AppConfigCheck.IsChecked == true)
             {
-                AppConfigFileProcessor.Save(Project, _appConfigDoc);
+                //AppConfigFileProcessor.Save(Project, _appConfigDoc);
             }
             DialogResult = ProjectCheck.IsChecked == true || PackagesConfigCheck.IsChecked == true || AppConfigCheck.IsChecked == true;
         }

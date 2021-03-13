@@ -17,9 +17,9 @@ namespace TestHarness
                 var logger = new Logger();
                 var packageCacheProcessor = new PackageCacheProcessor(name => new Package{Name = name}, file => new PackageVersion { File = file }, packageCache, logger);
                 packageCacheProcessor.ProcessCaches(args[0]);
-                var projectFileProcessor = new ProjectFileProcessor(file => new Project { AbsolutePath = file }, name => new Package{Name = name}, solution, packageCacheProcessor, new AppConfigFileProcessor(), new PackagesConfigFileProcessor(), packageCache, logger);
-                new SolutionFileProcessor(solution, projectFileProcessor, logger).LoadFromFile(args[0]);
-                projectFileProcessor.ResolvePackageReferences();
+                var solutionFileProcessor = new SolutionFileProcessor(solution, packageCache, file => new Project { AbsolutePath = file }, name => new Package { Name = name }, packageCacheProcessor, logger);
+                solutionFileProcessor.LoadFromFile(args[0]);
+                solutionFileProcessor.ResolvePackageReferences();
             }
         }
     }

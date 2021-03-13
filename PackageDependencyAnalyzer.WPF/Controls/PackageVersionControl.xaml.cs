@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 using PackageDependencyAnalysis.Model;
-using PackageDependencyAnalysis.Processors;
 using PackageDependencyAnalyzer.ViewModel;
 
 namespace PackageDependencyAnalyzer.Controls

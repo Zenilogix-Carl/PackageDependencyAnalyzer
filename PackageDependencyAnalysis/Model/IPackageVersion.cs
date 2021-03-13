@@ -16,6 +16,8 @@ namespace PackageDependencyAnalysis.Model
         bool IsPrerelease { get; set; }
         string PreReleaseSuffix { get; set; }
 
+        ICollection<AssemblyInfo> Assemblies { get; }
+
         PlatformDependencies Dependencies { get; }
 
         ICollection<IProject> ReferencingProjects { get; }

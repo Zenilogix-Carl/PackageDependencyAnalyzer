@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PackageDependencyAnalysis.Model
 {
@@ -6,13 +8,16 @@ namespace PackageDependencyAnalysis.Model
     {
         public IPackage Package { get; set; }
         public Version Version { get; set; }
-        public Version PackagesConfigVersion { get; set; }
-        public BindingRedirection BindingRedirection { get; set; }
-        public IPackageVersion ResolvedReference { get; set; }
+        public IList<AssemblyReference> AssemblyReferences { get; set; }
         public bool IsPrerelease { get; set; }
         public string PreReleaseSuffix { get; set; }
         public bool IsRange { get; set; }
-        public string HintPath { get; set; }
+        public Version PackagesConfigVersion { get; set; }
+        public IPackageVersion ResolvedReference { get; set; }
+        public string OriginalXml { get; set; }
+
+        public int? LineNumber { get; set; }
+        public int? PackagesConfigLineNumber { get; set; }
 
         internal bool Visited { get; set; }
 
@@ -22,13 +27,12 @@ namespace PackageDependencyAnalysis.Model
             {
                 Package = Package,
                 Version = Version,
+                AssemblyReferences = AssemblyReferences.Select(a => a.Clone()).ToList(),
                 PackagesConfigVersion = PackagesConfigVersion,
-                BindingRedirection = BindingRedirection?.Clone(),
                 ResolvedReference = ResolvedReference,
                 IsPrerelease = IsPrerelease,
                 PreReleaseSuffix = PreReleaseSuffix,
-                IsRange = IsRange,
-                HintPath = HintPath
+                IsRange = IsRange
             };
         }
 

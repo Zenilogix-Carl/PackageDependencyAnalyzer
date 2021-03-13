@@ -55,12 +55,12 @@ namespace PackageDependencyAnalyzer.Controls
             }
         }
 
-        private void Search_OnPopulating(object sender, PopulatingEventArgs e)
+        private void PackageSearch_OnPopulating(object sender, PopulatingEventArgs e)
         {
             ((AutoCompleteBox)sender).ItemsSource = ViewModel.PackageReferences?.Select(s => s.Package.Name);
         }
 
-        private void Search_OnDropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        private void PackageSearch_OnDropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {
             var autoCompleteBox = ((AutoCompleteBox)sender);
             var key = autoCompleteBox.Text;
@@ -75,9 +75,35 @@ namespace PackageDependencyAnalyzer.Controls
             }
         }
 
-        private void SearchClear_Click(object sender, RoutedEventArgs e)
+        private void PackageSearchClear_Click(object sender, RoutedEventArgs e)
         {
-            Search.Text = string.Empty;
+            PackageSearch.Text = string.Empty;
+        }
+
+        private void AssemblySearch_OnPopulating(object sender, PopulatingEventArgs e)
+        {
+            ((AutoCompleteBox)sender).ItemsSource = ViewModel.BindingRedirections?.Select(s => s.AssemblyName);
+        }
+
+        private void AssemblySearch_OnDropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            var autoCompleteBox = ((AutoCompleteBox)sender);
+            var key = autoCompleteBox.Text;
+            var binding = ViewModel.BindingRedirections.SingleOrDefault(b => b.AssemblyName == key);
+            if (binding != null)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    ViewModel.SelectedBindingRedirection = binding;
+                    autoCompleteBox.Text = string.Empty;
+                    PackageReferences.ScrollIntoView(binding);
+                });
+            }
+        }
+
+        private void AssemblySearchClear_Click(object sender, RoutedEventArgs e)
+        {
+            AssemblySearch.Text = string.Empty;
         }
 
         private void EditReferenceOnClick(object sender, RoutedEventArgs e)
@@ -88,6 +114,42 @@ namespace PackageDependencyAnalyzer.Controls
                 if (dlg.ShowDialog() == true)
                 {
                     Messenger.Default.Send(new ProjectModified{Project = ViewModel});
+                }
+            }
+        }
+
+        private void EditPackageReference_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem m && m.DataContext is PackageReference p)
+            {
+                var dlg = new XmlEditor { FileName = ViewModel.AbsolutePath, InitialLineNumber = p.LineNumber ?? 1, SelectMatchingText = p.Package.Name};
+                if (dlg.ShowDialog() == true)
+                {
+                    //Messenger.Default.Send(new ProjectModified { Project = ViewModel });
+                }
+            }
+        }
+
+        private void EditPackagesConfigReference_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem m && m.DataContext is PackageReference p)
+            {
+                var dlg = new XmlEditor { FileName = ViewModel.PackagesConfigPath, InitialLineNumber = p.PackagesConfigLineNumber ?? 1, SelectMatchingText = p.Package.Name};
+                if (dlg.ShowDialog() == true)
+                {
+                    //Messenger.Default.Send(new ProjectModified { Project = ViewModel });
+                }
+            }
+        }
+
+        private void EditAppConfigBinding_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem m && m.DataContext is BindingRedirection b)
+            {
+                var dlg = new XmlEditor { FileName = ViewModel.AppConfigPath, InitialLineNumber = b.LineNumber, SelectMatchingText = b.AssemblyName };
+                if (dlg.ShowDialog() == true)
+                {
+                    //Messenger.Default.Send(new ProjectModified { Project = ViewModel });
                 }
             }
         }

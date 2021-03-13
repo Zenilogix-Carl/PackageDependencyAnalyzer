@@ -19,6 +19,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Menu HorizontalAlignment="Stretch">
             <MenuItem Header="File">
@@ -44,5 +45,8 @@
 
         </Grid>
         <TextBox x:Name="Messages" x:FieldModifier="private" Grid.Row="2" MaxHeight="100" TextWrapping="Wrap" IsReadOnly="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Background="GhostWhite" Text="{Binding Path=LoggerViewModel.Messages, Mode=OneWay, Source={StaticResource Locator}}"/>
+        <Button Grid.Row="3" Visibility="{Binding Path=SolutionViewModel.IsSolutionModified, Source={StaticResource Locator}, Converter={StaticResource BooleanToVisibilityConverter}}" Click="ReloadSolution_OnClick">
+            <TextBlock Foreground="Red">Solution has been modified; click to reload</TextBlock>
+        </Button>
     </Grid>
 </Window>

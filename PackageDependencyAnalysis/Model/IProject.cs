@@ -7,9 +7,13 @@ namespace PackageDependencyAnalysis.Model
     {
         string Name { get; set; }
         string AbsolutePath { get; set; }
+        string PackagesConfigPath { get; set; }
+        string AppConfigPath { get; set; }
         Version Version { get; set; }
         ICollection<IProject> Projects { get; }
+        ICollection<IProject> Dependencies { get; }
         IDictionary<string,PackageReference> PackageReferenceDictionary { get; }
         ICollection<PackageReference> PackageReferences { get; }
+        ICollection<BindingRedirection> BindingRedirections { get; }
     }
 }

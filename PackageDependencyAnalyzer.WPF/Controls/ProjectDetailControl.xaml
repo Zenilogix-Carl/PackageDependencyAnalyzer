@@ -33,13 +33,15 @@
             <Grid>
                 <Grid Grid.Row="0" VerticalAlignment="Top">
                     <TextBlock Text="Search:" Margin="5"/>
-                    <controls:AutoCompleteBox x:Name="Search" x:FieldModifier="private" Margin="45,2,15,0" Populating="Search_OnPopulating" MinimumPrefixLength="2" FilterMode="Contains" DropDownClosed="Search_OnDropDownClosed"/>
-                    <Button HorizontalAlignment="Right" Width="15" Margin="0,2,0,0" Background="White" Click="SearchClear_Click">X</Button>
+                    <controls:AutoCompleteBox x:Name="PackageSearch" x:FieldModifier="private" Margin="45,2,15,0" Populating="PackageSearch_OnPopulating" MinimumPrefixLength="2" FilterMode="Contains" DropDownClosed="PackageSearch_OnDropDownClosed"/>
+                    <Button HorizontalAlignment="Right" Width="15" Margin="0,2,0,0" Background="White" Click="PackageSearchClear_Click">X</Button>
                 </Grid>
                 <ListView x:Name="PackageReferences" Grid.Row="0" Margin="0,28,0,0" ItemsSource="{Binding PackageReferences}" SelectedItem="{Binding SelectedPackageReference}">
                     <ListView.Resources>
                         <ContextMenu x:Key="PackageReferenceContextMenu">
-                            <MenuItem Header="Edit Reference" Click="EditReferenceOnClick"/>
+                            <!--<MenuItem Header="Edit Reference" Click="EditReferenceOnClick"/>-->
+                            <MenuItem Header="Edit Package Reference"  IsEnabled="{Binding LineNumber, Converter={StaticResource NotNullToBoolConverter}}" Click="EditPackageReference_OnClick"/>
+                            <MenuItem Header="Edit packages.config Reference" Visibility="{Binding PackagesConfigLineNumber, Converter={StaticResource NullToCollapsedConverter}}" IsEnabled="{Binding PackagesConfigLineNumber, Converter={StaticResource NotNullToBoolConverter}}" Click="EditPackagesConfigReference_OnClick"/>
                         </ContextMenu>
                     </ListView.Resources>
                     <ListView.View>
@@ -49,9 +51,6 @@
                             <GridViewColumn Header="Pre-Release" DisplayMemberBinding="{Binding PreReleaseSuffix}"/>
                             <GridViewColumn Header="Packages.Config" DisplayMemberBinding="{Binding PackagesConfigVersion}"/>
                             <GridViewColumn Header="Resolved" DisplayMemberBinding="{Binding ResolvedReference.Version}"/>
-                            <GridViewColumn Header="Redirect Min" DisplayMemberBinding="{Binding BindingRedirection.OldVersionFrom}"/>
-                            <GridViewColumn Header="Redirect Max" DisplayMemberBinding="{Binding BindingRedirection.OldVersionTo}"/>
-                            <GridViewColumn Header="Binding Redirected To" DisplayMemberBinding="{Binding BindingRedirection.NewVersion}"/>
                         </GridView>
                     </ListView.View>
                     <ListView.ItemContainerStyle>
@@ -62,6 +61,50 @@
                     </ListView.ItemContainerStyle>
                 </ListView>
             </Grid>
+        </TabItem>
+        <TabItem Header="Assembly Binding Redirections">
+            <Grid>
+                <Grid Grid.Row="0" VerticalAlignment="Top">
+                    <TextBlock Text="Search:" Margin="5"/>
+                    <controls:AutoCompleteBox x:Name="AssemblySearch" x:FieldModifier="private" Margin="45,2,15,0" Populating="AssemblySearch_OnPopulating" MinimumPrefixLength="2" FilterMode="Contains" DropDownClosed="AssemblySearch_OnDropDownClosed"/>
+                    <Button HorizontalAlignment="Right" Width="15" Margin="0,2,0,0" Background="White" Click="AssemblySearchClear_Click">X</Button>
+                </Grid>
+                <ListView x:Name="BindingRedirects" Grid.Row="0" Margin="0,28,0,0" ItemsSource="{Binding BindingRedirections}" SelectedItem="{Binding SelectedBindingRedirection}">
+                    <ListView.Resources>
+                        <ContextMenu x:Key="BindingRedirectContextMenu">
+                            <MenuItem Header="Edit app.config" Click="EditAppConfigBinding_OnClick"/>
+                        </ContextMenu>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Assembly Name" Width="200" DisplayMemberBinding="{Binding AssemblyName}"/>
+                            <GridViewColumn Header="Redirect Min" DisplayMemberBinding="{Binding OldVersionFrom}"/>
+                            <GridViewColumn Header="Redirect Max" DisplayMemberBinding="{Binding OldVersionTo}"/>
+                            <GridViewColumn Header="Binding Redirected To" DisplayMemberBinding="{Binding NewVersion}"/>
+                        </GridView>
+                    </ListView.View>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <EventSetter Event="MouseDoubleClick" Handler="PackageReferenceDoubleClick" />
+                            <Setter Property="ContextMenu" Value="{StaticResource BindingRedirectContextMenu}"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Dependent Projects">
+            <ListView ItemsSource="{Binding Dependencies}">
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter Event="MouseDoubleClick" Handler="ProjectReferenceDoubleClick" />
+                    </Style>
+                </ListView.Resources>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"></TextBlock>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </TabItem>
     </TabControl>
 </UserControl>

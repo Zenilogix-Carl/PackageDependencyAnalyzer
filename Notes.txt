@@ -1,0 +1,53 @@
+About assembly loading for reflection
+=====================================
+Can load an assembly for reflection, but there are considerations...
+Can't load multiple assemblies that would collide - this will occur where packages contain assemblies built for different frameworks
+Can't unload an assembly; have to unload an App domain.
+Can create an app domain and then unload, but this seems to have performance costs if doing it hundreds of times.
+The following is tested and works, but not feasible for inspecting all cached package assemblies because of the above considerations.
+Could be used to drill into an individual assembly
+NOTE also: found that some package assemblies won't load; probably because of incompatible framework.
+
+		// Declare a boundary object to contain a method we want to invoke in the app domain
+		// Must derive from MarshalByRefObject
+        class MethodObject : MarshalByRefObject
+        {
+			// The method we want to invoke
+			// Expects ada.Name to contain the file spec of the assembly we want to inspect
+			// Replaces the file spec with the assembly name
+            public void GetAssemblyNameInFile(AppDomainArgs ada)
+            {
+				// Load the assembly for reflection...
+                var assembly = Assembly.ReflectionOnlyLoadFrom(ada.Name);
+
+				// Get the assembly name from the "manifest module"
+                ada.Name = assembly.ManifestModule.Name;
+            }
+        }
+
+		// Declare a boundary object to contain the data we want to exchange
+        public class AppDomainArgs : MarshalByRefObject
+        {
+            public string Name { get; set; }
+        }
+
+		// Create the domain
+        AppDomain domain = AppDomain.CreateDomain("TempDomain");
+
+		// Instantiate the object containing the method we want to execute in the domain
+        var boundary = (MethodObject)
+            domain.CreateInstanceAndUnwrap(
+                typeof(MethodObject).Assembly.FullName,
+                typeof(MethodObject).FullName);
+
+		// Instantiate the data we want to exchange
+        AppDomainArgs ada = new AppDomainArgs { Name = "C:\MyFile.dll" };
+
+		// Invoke the method
+        boundary.GetAssemblyNameInFile(ada);
+
+		// Get the result
+        var result = ada.Name;
+
+		// Unload the domain
+		AppDomain.Unload(domain);
