@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using System.IO.Compression;
 using System.Net;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace PackageDependencyAnalysis.ContextObjects
 {
@@ -119,52 +119,71 @@ namespace PackageDependencyAnalysis.ContextObjects
             ProcessNugetPackage(nugetFileSpec);
         }
 
+        internal PackageContext(Stream stream, Func<string, bool> frameworkFilter = null)
+        {
+            _frameworkFilter = frameworkFilter;
+            ProcessNugetPackage(stream);
+        }
+
         public static PackageContext Create(string nugetFileSpec, Func<string, bool> frameworkFilter=null) => new PackageContext(nugetFileSpec, frameworkFilter);
         internal static PackageContext Create(PackageCacheContext context, string nugetFileSpec, Func<string, bool> frameworkFilter=null) => new PackageContext(context, nugetFileSpec, frameworkFilter);
 
-        private void ProcessNugetPackage(string nugetFileSpec)
+        public void ProcessNugetPackage(string nugetFileSpec)
         {
             FileName = nugetFileSpec;
 
             Directory = Path.GetDirectoryName(nugetFileSpec);
-            using (var archive = ZipFile.OpenRead(nugetFileSpec))
+            using (var stream = File.OpenRead(nugetFileSpec))
             {
-                foreach (var entry in archive.Entries)
+                ProcessNugetPackage(stream);
+            }
+        }
+
+        public void ProcessNugetPackage(Stream packageStream)
+        {
+            using (var archive = new ZipFile(packageStream))
+            {
+                foreach (ZipEntry entry in archive)
                 {
-                    if (entry.Name.EndsWith(".nuspec", StringComparison.InvariantCultureIgnoreCase))
+                    if (entry.IsFile)
                     {
-                        var stream = entry.Open();
-                        DateTime = entry.LastWriteTime.DateTime;
-                        using (var reader = new StreamReader(stream))
+                        if (entry.Name.EndsWith(".nuspec", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            RawNuSpec = reader.ReadToEnd();
+                            var stream = archive.GetInputStream(entry);
+                            DateTime = entry.DateTime;
+                            using (var reader = new StreamReader(stream))
+                            {
+                                RawNuSpec = reader.ReadToEnd();
+                            }
+
+                            ProcessNuSpecXml();
                         }
-                        ProcessNuSpecXml();
-                    }
-                    else if (entry.Name.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        var unencodedName = WebUtility.UrlDecode(entry.Name);
-                        var unencodedFullName = WebUtility.UrlDecode(entry.FullName);
-                        var folderName = Path.GetDirectoryName(unencodedFullName) ?? ".";
-                        var framework = AssemblyInfo.Framework(folderName);
-
-                        if (_frameworkFilter == null || framework != null && _frameworkFilter(AssemblyInfo.Framework(folderName)))
+                        else if (entry.Name.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            if (!_assemblies.TryGetValue(unencodedName, out var assemblyInfo))
+                            var unencodedFullName = WebUtility.UrlDecode(entry.Name);
+                            var unencodedName = Path.GetFileName(unencodedFullName);
+                            var folderName = Path.GetDirectoryName(unencodedFullName) ?? ".";
+                            var framework = AssemblyInfo.Framework(folderName);
+
+                            if (_frameworkFilter == null ||
+                                framework != null && _frameworkFilter(AssemblyInfo.Framework(folderName)))
                             {
-                                assemblyInfo = new AssemblyInfo { FileName = unencodedName };
-                                _assemblies[unencodedName] = assemblyInfo;
+                                if (!_assemblies.TryGetValue(unencodedName, out var assemblyInfo))
+                                {
+                                    assemblyInfo = new AssemblyInfo {FileName = unencodedName};
+                                    _assemblies[unencodedName] = assemblyInfo;
+                                }
+
+                                assemblyInfo.Folders.Add(folderName);
+
+                                if (!Folders.TryGetValue(folderName, out var folder))
+                                {
+                                    folder = new List<string>();
+                                    Folders[folderName] = folder;
+                                }
+
+                                folder.Add(unencodedName);
                             }
-
-                            assemblyInfo.Folders.Add(folderName);
-
-                            if (!Folders.TryGetValue(folderName, out var folder))
-                            {
-                                folder = new List<string>();
-                                Folders[folderName] = folder;
-                            }
-
-                            folder.Add(unencodedName);
                         }
                     }
                 }

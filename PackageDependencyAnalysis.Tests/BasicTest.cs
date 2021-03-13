@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using PackageDependencyAnalysis.ContextObjects;
-using PackageDependencyAnalysis.Processors;
 
 namespace PackageDependencyAnalysis.Tests
 {
