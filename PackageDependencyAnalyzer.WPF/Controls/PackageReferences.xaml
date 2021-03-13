@@ -1,0 +1,27 @@
+﻿<Window x:Class="PackageDependencyAnalyzer.Controls.PackageReferences"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PackageDependencyAnalyzer.Controls"
+        mc:Ignorable="d"
+        Title="All Package References" Height="450" Width="600">
+    <Grid>
+        <Button HorizontalAlignment="Right" VerticalAlignment="Top" Padding="2,0" Click="CopyToClipboard_OnClick">Copy to Clipboard</Button>
+        <ListView x:Name="ListView" Margin="0,20,0,0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Package Name" Width="300" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Versions" Width="80" DisplayMemberBinding="{Binding Path=Version}"/>
+                    <GridViewColumn Header="Pre-Release" Width="80" DisplayMemberBinding="{Binding Path=PreReleaseSuffix}"/>
+                    <GridViewColumn Header="Referenced By Solution" Width="80" DisplayMemberBinding="{Binding Path=IsReferenced}"/>
+                </GridView>
+            </ListView.View>
+            <ListView.Resources>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <EventSetter Event="MouseDoubleClick" Handler="PackageReferenceDoubleClick" />
+                </Style>
+            </ListView.Resources>
+        </ListView>
+    </Grid>
+</Window>

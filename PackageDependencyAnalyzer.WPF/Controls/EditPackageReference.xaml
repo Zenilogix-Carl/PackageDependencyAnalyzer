@@ -1,0 +1,73 @@
+﻿<Window x:Class="PackageDependencyAnalyzer.Controls.EditPackageReference"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:controls="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
+        xmlns:local="clr-namespace:PackageDependencyAnalyzer.Controls"
+        xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        mc:Ignorable="d"
+        Title="Edit Package Reference" Height="500" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="180"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TabControl>
+            <TabItem Header="Project File">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Original:" FontWeight="Bold"/>
+                    <avalonedit:TextEditor Margin="0,0,0,15" Grid.Row="1" x:FieldModifier="public" x:Name="OriginalProjectXML" SyntaxHighlighting="XML" IsReadOnly="True" ShowLineNumbers="False" Padding="2" WordWrap="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" ></avalonedit:TextEditor>
+                    <TextBlock Grid.Row="2" Text="Edited:" FontWeight="Bold"/>
+                    <avalonedit:TextEditor Margin="0,0,0,15" Grid.Row="3" x:FieldModifier="public"  x:Name="ProjectXML" SyntaxHighlighting="XML" IsReadOnly="True" ShowLineNumbers="False" Padding="2" WordWrap="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" ></avalonedit:TextEditor>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="PackagesConfigTab" Header="packages.config">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Original:" FontWeight="Bold"/>
+                    <avalonedit:TextEditor Margin="0,0,0,15" Grid.Row="1" x:FieldModifier="public" x:Name="OriginalPackagesConfigXML" SyntaxHighlighting="XML" IsReadOnly="True" ShowLineNumbers="False" Padding="2" WordWrap="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" ></avalonedit:TextEditor>
+                    <TextBlock Grid.Row="2" Text="Edited:" FontWeight="Bold"/>
+                    <avalonedit:TextEditor Margin="0,0,0,15" Grid.Row="3" x:FieldModifier="public"  x:Name="PackagesConfigXML" SyntaxHighlighting="XML" IsReadOnly="True" ShowLineNumbers="False" Padding="2" WordWrap="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" ></avalonedit:TextEditor>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="AppConfigTab" Header="app.config">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Original:" FontWeight="Bold"/>
+                    <avalonedit:TextEditor Margin="0,0,0,15" Grid.Row="1" x:FieldModifier="public" x:Name="OriginalAppConfigXML" SyntaxHighlighting="XML" IsReadOnly="True" ShowLineNumbers="False" Padding="2" WordWrap="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" ></avalonedit:TextEditor>
+                    <TextBlock Grid.Row="2" Text="Edited:" FontWeight="Bold"/>
+                    <avalonedit:TextEditor Margin="0,0,0,15" Grid.Row="3" x:FieldModifier="public"  x:Name="AppConfigXML" SyntaxHighlighting="XML" IsReadOnly="True" ShowLineNumbers="False" Padding="2" WordWrap="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" ></avalonedit:TextEditor>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <WindowsFormsHost Grid.Row="1">
+            <forms:PropertyGrid x:Name="PropertyGrid" x:FieldModifier="private" ToolbarVisible="False" PropertySort="NoSort"/>
+        </WindowsFormsHost>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock x:Name="Apply" Margin="0,5,0,0" Text="Apply changes to: "></TextBlock>
+            <CheckBox x:Name="ProjectCheck" Margin="5,0" VerticalAlignment="Center" >project file</CheckBox>
+            <CheckBox x:Name="PackagesConfigCheck" Margin="5,0" VerticalAlignment="Center" >packages.config</CheckBox>
+            <CheckBox x:Name="AppConfigCheck" Margin="5,0" VerticalAlignment="Center" >app.config</CheckBox>
+            <Button Margin="5,5,0,5" Padding="5,0" Click="Save_OnClick">Save and Close</Button>
+        </StackPanel>
+    </Grid>
+</Window>

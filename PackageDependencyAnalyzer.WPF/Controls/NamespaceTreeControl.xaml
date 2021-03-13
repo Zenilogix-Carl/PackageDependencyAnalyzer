@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="PackageDependencyAnalyzer.Controls.NamespaceTreeControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PackageDependencyAnalyzer.Controls"
+             xmlns:viewModel="clr-namespace:PackageDependencyAnalyzer.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             DataContext="{Binding SolutionViewModel, Source={StaticResource Locator}}">
+    <UserControl.Resources>
+        <Style x:Key="LibraryTreeViewItemStyle"
+               TargetType="{x:Type TreeViewItem}">
+            <Setter Property="IsExpanded"
+                    Value="{Binding IsExpanded, Mode=TwoWay}" />
+            <Setter Property="IsSelected"
+                    Value="{Binding IsSelected, Mode=TwoWay}" />
+            <Setter Property="FontWeight"
+                    Value="Normal" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected"
+                         Value="True">
+                    <Setter Property="FontWeight"
+                            Value="Bold" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <TreeView 
+        ItemContainerStyle="{StaticResource LibraryTreeViewItemStyle}"
+        ItemsSource="{Binding Path=NamespaceViewModel.Namespaces}" SelectedItemChanged="TreeView_OnSelectedItemChanged">
+        <TreeView.ItemTemplate>
+            <HierarchicalDataTemplate DataType="{x:Type viewModel:NamespaceViewModel}" ItemsSource="{Binding Path=Namespaces}">
+                <TextBlock Text="{Binding Path=DisplayName}"></TextBlock>
+            </HierarchicalDataTemplate>
+        </TreeView.ItemTemplate>
+    </TreeView>
+</UserControl>

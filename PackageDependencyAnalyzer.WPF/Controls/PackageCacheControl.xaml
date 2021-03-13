@@ -1,0 +1,112 @@
+﻿<UserControl x:Class="PackageDependencyAnalyzer.Controls.PackageCacheControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PackageDependencyAnalyzer.Controls"
+             xmlns:controls="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="400"
+             DataContext="{Binding PackageCacheViewModel, Source={StaticResource Locator}}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" MinHeight="80"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" MinHeight="80"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*" MinHeight="80"/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <ContextMenu x:Key="PackageContextMenu">
+                <MenuItem Header="Copy Name to Clipboard" Click="CopyNameToClipboardClick"/>
+                <MenuItem Header="Find All References" Click="FindAllReferencesOnClick"/>
+            </ContextMenu>
+        </Grid.Resources>
+        <TabControl>
+            <TabItem Header="Active Packages" ToolTip="All packages used by the solution, directly or indirectly">
+                <Grid>
+                    <Grid Grid.Row="0" VerticalAlignment="Top">
+                        <TextBlock Text="Search:" Margin="5"/>
+                        <controls:AutoCompleteBox x:Name="Active" x:FieldModifier="private" Margin="45,2,15,0" Populating="Active_OnPopulating" MinimumPrefixLength="2" FilterMode="Contains" DropDownClosed="Search_OnDropDownClosed"/>
+                        <Button HorizontalAlignment="Right" Width="15" Margin="0,2,0,0" Background="White" Click="ActiveClear_Click">X</Button>
+                    </Grid>
+                    <ListView x:Name="ActiveList" Grid.Row="0" Margin="0,28,0,0" ItemsSource="{Binding ReferencedPackages}" SelectedItem="{Binding SelectedPackage}" SelectionChanged="Packages_OnSelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Package Name" Width="300" DisplayMemberBinding="{Binding Name}"/>
+                                <GridViewColumn Header="Versions" Width="80" DisplayMemberBinding="{Binding Path=Versions.Count}"/>
+                            </GridView>
+                        </ListView.View>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                <Setter Property="ContextMenu" Value="{StaticResource PackageContextMenu}"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="All Packages" ToolTip="All known packages (some may not be in cache)">
+                <Grid>
+                    <Grid Grid.Row="0" VerticalAlignment="Top">
+                        <TextBlock Text="Search:" Margin="5"/>
+                        <controls:AutoCompleteBox x:Name="All" x:FieldModifier="private" Margin="45,2,15,0" Populating="All_OnPopulating" MinimumPrefixLength="2" FilterMode="Contains" DropDownClosed="Search_OnDropDownClosed"/>
+                        <Button HorizontalAlignment="Right" Width="15" Margin="0,2,0,0" Background="White" Click="AllClear_Click">X</Button>
+                    </Grid>
+                    <ListView x:Name="AllList" Grid.Row="0" Margin="0,28,0,0" ItemsSource="{Binding Packages}" SelectedItem="{Binding SelectedPackage}" SelectionChanged="Packages_OnSelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Package Name" Width="300" DisplayMemberBinding="{Binding Name}"/>
+                                <GridViewColumn Header="Versions" Width="80" DisplayMemberBinding="{Binding Path=PackageVersions.Count}"/>
+                            </GridView>
+                        </ListView.View>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                <Setter Property="ContextMenu" Value="{StaticResource PackageContextMenu}"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </Grid>
+            </TabItem>
+            <!--<TabItem Header="Cache" ToolTip="All packages available in the cache">
+                <Grid>
+                    <Grid Grid.Row="0" VerticalAlignment="Top">
+                        <TextBlock Text="Search:" Margin="5"/>
+                        <controls:AutoCompleteBox x:Name="AllCache" x:FieldModifier="private" Margin="45,2,15,0" Populating="AllCache_OnPopulating" MinimumPrefixLength="2" FilterMode="Contains" DropDownClosed="Search_OnDropDownClosed"/>
+                        <Button HorizontalAlignment="Right" Width="15" Margin="0,2,0,0" Background="White" Click="AllCacheClear_Click">X</Button>
+                    </Grid>
+                    <ListView x:Name="CacheList" Grid.Row="0" Margin="0,28,0,0" ItemsSource="{Binding  PackagesCache.Values}" SelectedItem="{Binding SelectedPackage}" SelectionChanged="Packages_OnSelectionChanged">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Package Name" Width="300" DisplayMemberBinding="{Binding Name}"/>
+                                <GridViewColumn Header="Versions" Width="80" DisplayMemberBinding="{Binding Path=PackageVersions.Count}"/>
+                            </GridView>
+                        </ListView.View>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                <Setter Property="ContextMenu" Value="{StaticResource PackageContextMenu}"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </Grid>
+            </TabItem>-->
+            <TabItem Header="Issues" Visibility="{Binding HasIssues, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBox IsReadOnly="True" Text="{Binding Issues}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+            </TabItem>
+        </TabControl>
+
+        <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"/>
+
+        <Grid Grid.Row="2" Background="LightGray">
+            <TextBlock Text="No Package Selected" FontSize="20" Foreground="DarkGray" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+            <local:PackageDetailControl Visibility="{Binding SelectedPackage, Converter={StaticResource NullToCollapsedConverter}}" />
+        </Grid>
+
+        <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"/>
+
+        <Grid Grid.Row="4" Background="LightGray">
+            <TextBlock Text="No Package Version Selected" FontSize="20" Foreground="DarkGray" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+            <local:PackageVersionControl Visibility="{Binding SelectedPackageVersion, Converter={StaticResource NullToCollapsedConverter}}"/>
+        </Grid>
+
+    </Grid>
+</UserControl>

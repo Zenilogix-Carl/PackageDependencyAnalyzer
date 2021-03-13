@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="PackageDependencyAnalyzer.Controls.ProjectDetailControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+             xmlns:local="clr-namespace:PackageDependencyAnalyzer.Controls"
+             xmlns:controls="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             DataContext="{Binding SolutionViewModel.ProjectViewModel, Source={StaticResource Locator}}">
+    <TabControl >
+        <TabItem Header="Details" ToolTip="Details of the specified project">
+            <WindowsFormsHost>
+                <wf:PropertyGrid x:Name="PropertyGrid" x:FieldModifier="private" ToolbarVisible="False" PropertySort="NoSort"/>
+            </WindowsFormsHost>
+        </TabItem>
+        <TabItem Header="Project References">
+            <ListView ItemsSource="{Binding Projects}">
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter Event="MouseDoubleClick" Handler="ProjectReferenceDoubleClick" />
+                    </Style>
+                </ListView.Resources>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"></TextBlock>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </TabItem>
+        <TabItem Header="Package References">
+            <Grid>
+                <Grid Grid.Row="0" VerticalAlignment="Top">
+                    <TextBlock Text="Search:" Margin="5"/>
+                    <controls:AutoCompleteBox x:Name="Search" x:FieldModifier="private" Margin="45,2,15,0" Populating="Search_OnPopulating" MinimumPrefixLength="2" FilterMode="Contains" DropDownClosed="Search_OnDropDownClosed"/>
+                    <Button HorizontalAlignment="Right" Width="15" Margin="0,2,0,0" Background="White" Click="SearchClear_Click">X</Button>
+                </Grid>
+                <ListView x:Name="PackageReferences" Grid.Row="0" Margin="0,28,0,0" ItemsSource="{Binding PackageReferences}" SelectedItem="{Binding SelectedPackageReference}">
+                    <ListView.Resources>
+                        <ContextMenu x:Key="PackageReferenceContextMenu">
+                            <MenuItem Header="Edit Reference" Click="EditReferenceOnClick"/>
+                        </ContextMenu>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Package Name" Width="200" DisplayMemberBinding="{Binding Package.Name}"/>
+                            <GridViewColumn Header="CsProj" DisplayMemberBinding="{Binding Version}"/>
+                            <GridViewColumn Header="Pre-Release" DisplayMemberBinding="{Binding PreReleaseSuffix}"/>
+                            <GridViewColumn Header="Packages.Config" DisplayMemberBinding="{Binding PackagesConfigVersion}"/>
+                            <GridViewColumn Header="Resolved" DisplayMemberBinding="{Binding ResolvedReference.Version}"/>
+                            <GridViewColumn Header="Redirect Min" DisplayMemberBinding="{Binding BindingRedirection.OldVersionFrom}"/>
+                            <GridViewColumn Header="Redirect Max" DisplayMemberBinding="{Binding BindingRedirection.OldVersionTo}"/>
+                            <GridViewColumn Header="Binding Redirected To" DisplayMemberBinding="{Binding BindingRedirection.NewVersion}"/>
+                        </GridView>
+                    </ListView.View>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <EventSetter Event="MouseDoubleClick" Handler="PackageReferenceDoubleClick" />
+                            <Setter Property="ContextMenu" Value="{StaticResource PackageReferenceContextMenu}"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</UserControl>

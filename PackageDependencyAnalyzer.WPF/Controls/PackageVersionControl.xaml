@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="PackageDependencyAnalyzer.Controls.PackageVersionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+             xmlns:model="clr-namespace:PackageDependencyAnalysis.Model;assembly=PackageDependencyAnalysis"
+             xmlns:local="clr-namespace:PackageDependencyAnalyzer.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="White"
+             DataContext="{Binding PackageCacheViewModel, Source={StaticResource Locator}}">
+    <TabControl x:Name="TabControl" x:FieldModifier="private">
+        <TabItem Header="Details" x:Name="Details" x:FieldModifier="private" ToolTip="Details of the specific package version">
+            <WindowsFormsHost>
+                <wf:PropertyGrid x:Name="PropertyGrid" x:FieldModifier="private" ToolbarVisible="False" PropertySort="NoSort"/>
+            </WindowsFormsHost>
+        </TabItem>
+        <TabItem Header="Dependencies" ToolTip="Dependencies of the specific package version">
+            <TreeView ItemsSource="{Binding SelectedPackageVersion.Dependencies}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type model:PlatformDependencies}" ItemsSource="{Binding Value.Values}">
+                        <TextBlock Text="{Binding Key}"></TextBlock>
+                        <HierarchicalDataTemplate.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type model:PackageReference}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding  Package.Name}"></TextBlock>
+                                    <TextBlock Margin="10,0" Text="{Binding  Version}"></TextBlock>
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </HierarchicalDataTemplate.ItemTemplate>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <EventSetter Event="MouseDoubleClick" Handler="OnTreeViewDoubleClick"/>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+            </TreeView>
+        </TabItem>
+        <TabItem Header="Referenced By Packages" ToolTip="Packages which reference this specific package version">
+            <ListView ItemsSource="{Binding SelectedPackageVersion.ReferencingPackages}" >
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter Event="MouseDoubleClick" Handler="PackageReferenceDoubleClick" />
+                    </Style>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Package Name" Width="300" DisplayMemberBinding="{Binding Package.Name}"/>
+                        <GridViewColumn Header="Referenced Version" DisplayMemberBinding="{Binding Version}"/>
+                        <GridViewColumn Header="Pre-Release" DisplayMemberBinding="{Binding PreReleaseSuffix}"/>
+                        <GridViewColumn Header="Is Solution Dependency" DisplayMemberBinding="{Binding IsReferenced}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </TabItem>
+        <TabItem Header="Referenced By Projects" ToolTip="Projects which reference this specific package version">
+            <ListView ItemsSource="{Binding SelectedPackageVersion.ReferencingProjects}" >
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter Event="MouseDoubleClick" Handler="ProjectReferenceDoubleClick" />
+                    </Style>
+                </ListView.Resources>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"></TextBlock>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </TabItem>
+        <TabItem Header="Referenced By Packages Config" ToolTip="Projects which reference this package version via packages.config">
+            <ListView ItemsSource="{Binding SelectedPackageVersion.ConfigReferences}" >
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter Event="MouseDoubleClick" Handler="ProjectReferenceDoubleClick" />
+                    </Style>
+                </ListView.Resources>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"></TextBlock>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </TabItem>
+        <TabItem Header="Referenced By Binding Redirections" ToolTip="Projects which reference this package version via app.config binding redirection">
+            <ListView ItemsSource="{Binding SelectedPackageVersion.BindingRedirectReferences}" >
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter Event="MouseDoubleClick" Handler="ProjectReferenceDoubleClick" />
+                    </Style>
+                </ListView.Resources>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"></TextBlock>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </TabItem>
+        <TabItem Header="Raw Nuspec">
+            <TextBox IsReadOnly="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Text="{Binding SelectedPackageVersion.NuSpec}"></TextBox>
+        </TabItem>
+    </TabControl>
+</UserControl>
