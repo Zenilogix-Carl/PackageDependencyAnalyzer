@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using PackageDependencyAnalysis.Model;
 
 namespace PackageDependencyAnalysis.ContextObjects
 {
-    public class PackageReferenceContext : ReferenceContextBase, IAssemblyReferenceContext
+    public class PackageReferenceContext : ReferenceContextBase
     {
         private const string VersionString = "Version";
 
@@ -16,33 +17,20 @@ namespace PackageDependencyAnalysis.ContextObjects
         private readonly XAttribute _versionAttribute;
         private readonly string _root;
         private readonly string _leaf;
-        private Version _version;
-        private string _preRelease;
+        private ReleaseVersion _version;
 
         internal ReferenceContext ReferenceContext { get; }
 
-        internal string ReconstructedHintPath => IsPreRelease ? $"{_root}\\packages\\{Name}.{Version}-{PreRelease}\\{_leaf}" : $"{_root}\\packages\\{Name}.{Version}\\{_leaf}";
-
-        public bool IsPreRelease => !string.IsNullOrWhiteSpace(_preRelease);
+        internal string ReconstructedHintPath => $"{_root}\\packages\\{Name}.{Version}\\{_leaf}";
 
         public override string Name { get; }
 
-        public Version Version
+        public ReleaseVersion Version
         {
             get => _version;
             set
             {
                 _version = value;
-                SetVersion();
-            }
-        }
-
-        public string PreRelease
-        {
-            get => _preRelease;
-            set
-            {
-                _preRelease = value;
                 SetVersion();
             }
         }
@@ -60,8 +48,7 @@ namespace PackageDependencyAnalysis.ContextObjects
             if (versionStr != null)
             {
                 var match = VersionRegex.Match(versionStr);
-                _version = new Version(match.Groups["Version"].Value);
-                _preRelease = match.Groups["Suffix"]?.Value;
+                _version = new ReleaseVersion(new Version(match.Groups["Version"].Value)){Release = match.Groups["Suffix"]?.Value };
             }
         }
 
@@ -74,8 +61,7 @@ namespace PackageDependencyAnalysis.ContextObjects
             {
                 _root = match.Groups["Root"]?.Value;
                 Name = match.Groups["Package"]?.Value;
-                _version = new Version(match.Groups["Version"]?.Value ?? string.Empty);
-                _preRelease = match.Groups["Suffix"]?.Value;
+                _version = new ReleaseVersion(new Version(match.Groups["Version"]?.Value ?? string.Empty)){Release = match.Groups["Suffix"]?.Value};
                 _leaf = match.Groups["Leaf"]?.Value;
             }
         }
@@ -90,11 +76,11 @@ namespace PackageDependencyAnalysis.ContextObjects
         {
             if (_versionElement != null)
             {
-                _versionElement.Value = IsPreRelease ? $"{_version}-{_preRelease}" : _version.ToString();
+                _versionElement.Value = _version.ToString();
             }
             else if (_versionAttribute != null)
             {
-                _versionAttribute.Value = IsPreRelease ? $"{_version}-{_preRelease}" : _version.ToString();
+                _versionAttribute.Value = _version.ToString();
             }
             else
             {

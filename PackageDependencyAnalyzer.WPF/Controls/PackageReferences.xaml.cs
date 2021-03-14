@@ -73,7 +73,7 @@ namespace PackageDependencyAnalyzer.Controls
                 }
                 else if (item is IPackageVersion v)
                 {
-                    sb.AppendLine($"{v.Package.Name}\t{v.Version}\t{v.PreReleaseSuffix}");
+                    sb.AppendLine($"{v.Package.Name}\t{v.Version}");
                 }
             }
 

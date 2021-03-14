@@ -40,7 +40,6 @@ namespace PackageDependencyAnalysis.Analyzers
                     {
                         Package = package,
                         Version = packageReferenceContext.Version,
-                        PreReleaseSuffix = packageReferenceContext.PreRelease,
                         LineNumber = packageReferenceContext.LineNumber,
                         OriginalXml = packageReferenceContext.OriginalXml
                     };
@@ -71,7 +70,6 @@ namespace PackageDependencyAnalysis.Analyzers
                             {
                                 Package = package,
                                 Version = packageContext.Version,
-                                PreReleaseSuffix = packageContext.PreRelease,
                                 PackagesConfigLineNumber = packageContext.LineNumber
                             };
                         }

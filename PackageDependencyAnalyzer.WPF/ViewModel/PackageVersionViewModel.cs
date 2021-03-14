@@ -11,28 +11,32 @@ namespace PackageDependencyAnalyzer.ViewModel
 {
     public class PackageVersionViewModel : ViewModelBase, IPackageVersion
     {
-        [ReadOnly(true)]
+        [ReadOnly(true),
+        Description("Full file spec of the cached nupkg. This will be empty if the package was not found in the cache.")]
         public string File { get; }
+
+        [ReadOnly(true),
+        Description("Source URL of the nupkg. This will be empty if the package was found in the cache.")]
+        public string Source { get; set; }
+
         [Browsable(false)]
         public IPackage Package { get; set; }
 
+        [Description("Package name")]
         public string Name => Package.Name;
+
+        [Description("Folder containing the nupkg file. This will be empty if the package was not found in the cache.")]
         public string Folder => Path.GetDirectoryName(File);
 
-        [ReadOnly(true)]
+        [ReadOnly(true),
+        DisplayName("Published")]
         public DateTime DateTime { get; set; }
 
         [ReadOnly(true)]
         public string Description { get; set; }
 
         [ReadOnly(true)]
-        public Version Version { get; set; }
-
-        [Browsable(false)]
-        public bool IsPrerelease { get; set; }
-
-        [ReadOnly(true)]
-        public string PreReleaseSuffix { get; set; }
+        public ReleaseVersion Version { get; set; }
 
         [Browsable(false)]
         public ICollection<AssemblyInfo> Assemblies { get; } = new ObservableCollection<AssemblyInfo>();

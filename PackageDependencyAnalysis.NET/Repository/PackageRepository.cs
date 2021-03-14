@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using PackageDependencyAnalysis.ContextObjects;
-using PackageDependencyAnalysis.Model;
 using PackageDependencyAnalysis.RemoteServices;
 
 namespace PackageDependencyAnalysis.Repository
@@ -53,7 +50,7 @@ namespace PackageDependencyAnalysis.Repository
                 {
                     using (var stream = await packageVersion.Source.GetPackage(name, version, releaseLabel))
                     {
-                        return new PackageContext(stream, _frameworkFilter);
+                        return new PackageContext(stream, _frameworkFilter) { Source = packageVersion.Source.Source };
                     }
                 }
             }

@@ -23,17 +23,6 @@ namespace PackageDependencyAnalyzer.ViewModel
             }
         }
 
-        [Description("Contains a pre-release suffix if applicable; empty for normal release")]
-        public string PreRelease
-        {
-            get => _packageReference?.PreReleaseSuffix;
-            set
-            {
-                _packageReference.PreReleaseSuffix = value;
-                Messenger.Default.Send(new ProjectPackageReferenceModified());
-            }
-        }
-
         //[DisplayName("Binding Redirection Min Version")]
         //public string BindingRedirectionFrom
         //{

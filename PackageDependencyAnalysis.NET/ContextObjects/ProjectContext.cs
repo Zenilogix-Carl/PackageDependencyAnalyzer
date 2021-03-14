@@ -148,7 +148,7 @@ namespace PackageDependencyAnalysis.ContextObjects
         public AppConfigContext GetAppConfigContext() => HasAppConfig ? AppConfigContext.Create(AppConfigFileSpec) : null;
 
         public IEnumerable<IProject> GetProjectReferences(Func<ProjectReferenceContext, IProject> projectLookupFunc) => ProjectReferences.Select(projectLookupFunc);
-        public IEnumerable<IPackage> GetPackages(Func<PackageReferenceContext, IPackage> projectFactoryFunc) => PackageReferences.Select(projectFactoryFunc);
+        public IEnumerable<IPackage> GetPackages(Func<PackageReferenceContext, IPackage> packageFactoryFunc) => PackageReferences.Select(packageFactoryFunc);
 
         public void Save()
         {

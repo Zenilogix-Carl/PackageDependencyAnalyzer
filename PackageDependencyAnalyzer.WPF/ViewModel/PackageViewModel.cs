@@ -11,11 +11,11 @@ namespace PackageDependencyAnalyzer.ViewModel
     public class PackageViewModel : ViewModelBase, IPackage
     {
         public string Name { get; }
-        public ICollection<Version> Versions => VersionDictionary.Keys;
+        public ICollection<ReleaseVersion> Versions => VersionDictionary.Keys;
         public ICollection<IPackageVersion> PackageVersions => VersionDictionary.Values;
 
-        public IDictionary<Version, IPackageVersion> VersionDictionary { get; } =
-            new ObservableDictionary<Version, IPackageVersion>{Dispatcher = Dispatcher.CurrentDispatcher};
+        public IDictionary<ReleaseVersion, IPackageVersion> VersionDictionary { get; } =
+            new ObservableDictionary<ReleaseVersion, IPackageVersion>{Dispatcher = Dispatcher.CurrentDispatcher};
 
         public IDictionary<string, IProject> ReferencingProjects { get; } = new ObservableDictionary<string, IProject>{Dispatcher = Dispatcher.CurrentDispatcher};
         public IDictionary<string, IPackageVersion> ReferencingPackages { get; } = new ObservableDictionary<string, IPackageVersion>{Dispatcher = Dispatcher.CurrentDispatcher};

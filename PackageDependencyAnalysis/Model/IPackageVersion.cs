@@ -5,16 +5,15 @@ namespace PackageDependencyAnalysis.Model
 {
     public interface IPackageVersion : IContext
     {
+        string Source { get; set; }
+
         IPackage Package { get; set; }
 
-        Version Version { get; set; }
+        ReleaseVersion Version { get; set; }
 
         DateTime DateTime { get; set; }
 
         string Description { get; set; }
-
-        bool IsPrerelease { get; set; }
-        string PreReleaseSuffix { get; set; }
 
         ICollection<AssemblyInfo> Assemblies { get; }
 

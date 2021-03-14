@@ -89,7 +89,6 @@ namespace PackageDependencyAnalysis.Analyzers
             if (package.VersionDictionary.TryGetValue(packageReference.Version, out var packageVersion))
             {
                 packageReference.ResolvedReference = packageVersion;
-                packageReference.PreReleaseSuffix = packageVersion.PreReleaseSuffix;
                 return true;
             }
             else
@@ -98,7 +97,6 @@ namespace PackageDependencyAnalysis.Analyzers
                 if (match != null)
                 {
                     packageReference.ResolvedReference = package.VersionDictionary[match];
-                    packageReference.PreReleaseSuffix = packageReference.ResolvedReference.PreReleaseSuffix;
                     return true;
                 }
             }

@@ -48,8 +48,20 @@ namespace PackageDependencyAnalysis.ContextObjects
         private XNamespace _ns;
         private IDictionary<string, AssemblyInfo> _assemblies = new Dictionary<string, AssemblyInfo>();
 
+        /// <summary>
+        /// Full path of the nupkg file (if cached)
+        /// </summary>
         public string FileName { get; private set; }
+
+        /// <summary>
+        /// Folder location containing the nupkg file (if cached)
+        /// </summary>
         public string Directory { get; private set; }
+
+        /// <summary>
+        /// Nuget source where the package was found (if not cached)
+        /// </summary>
+        public string Source { get; set; }
         public string  Name { get; private set; }
         public DateTime DateTime { get; private set; }
         public string Description { get; private set; }

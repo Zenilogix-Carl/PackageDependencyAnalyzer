@@ -93,7 +93,6 @@ namespace PackageDependencyAnalyzer.ViewModel
                 var packageVersion = new PackageVersionViewModel(packageContext.FileName)
                 {
                     Version = packageContext.Version,
-                    PreReleaseSuffix = packageContext.PreReleaseSuffix,
                     DateTime = packageContext.DateTime,
                     Description = packageContext.Description,
                     NuSpec = packageContext.RawNuSpec,
@@ -151,7 +150,6 @@ namespace PackageDependencyAnalyzer.ViewModel
             if (package.VersionDictionary.TryGetValue(packageReference.Version, out var packageVersion))
             {
                 packageReference.ResolvedReference = packageVersion;
-                packageReference.PreReleaseSuffix = packageVersion.PreReleaseSuffix;
                 return true;
             }
             else
@@ -160,7 +158,6 @@ namespace PackageDependencyAnalyzer.ViewModel
                 if (match != null)
                 {
                     packageReference.ResolvedReference = package.VersionDictionary[match];
-                    packageReference.PreReleaseSuffix = packageReference.ResolvedReference.PreReleaseSuffix;
                     return true;
                 }
             }
@@ -214,8 +211,6 @@ namespace PackageDependencyAnalyzer.ViewModel
             {
                 Package = package,
                 Version = reference.Version,
-                IsPrerelease = reference.IsPreRelease,
-                PreReleaseSuffix = reference.PreRelease
             };
         }
 

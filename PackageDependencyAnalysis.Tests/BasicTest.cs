@@ -31,7 +31,7 @@ namespace PackageDependencyAnalysis.Tests
                 Console.WriteLine("Package refs:");
                 foreach (var packageReference in project.PackageReferences)
                 {
-                    Console.WriteLine($"{packageReference.Name}; Version={packageReference.Version}; Pre-release:{packageReference.PreRelease}");
+                    Console.WriteLine($"{packageReference.Name}; Version={packageReference.Version}");
                     foreach (var assemblyReference in packageReference.AssemblyReferences)
                     {
                         Console.WriteLine($"    {assemblyReference.AssemblyName} {assemblyReference.AssemblyVersion}");

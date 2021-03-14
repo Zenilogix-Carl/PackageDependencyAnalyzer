@@ -7,11 +7,11 @@ namespace PackageDependencyAnalysis.Model
     {
         string Name { get;  }
 
-        ICollection<Version> Versions { get; }
+        ICollection<ReleaseVersion> Versions { get; }
 
         ICollection<IPackageVersion> PackageVersions { get; }
 
-        IDictionary<Version, IPackageVersion> VersionDictionary { get; }
+        IDictionary<ReleaseVersion, IPackageVersion> VersionDictionary { get; }
 
         IDictionary<string,IProject> ReferencingProjects { get; }
         IDictionary<string,IPackageVersion> ReferencingPackages { get; }

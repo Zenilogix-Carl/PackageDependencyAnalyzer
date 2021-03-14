@@ -216,7 +216,6 @@ namespace PackageDependencyAnalyzer.ViewModel
                     {
                         Package = package,
                         Version = packageReferenceContext.Version,
-                        PreReleaseSuffix = packageReferenceContext.PreRelease,
                         AssemblyReferences = packageReferenceContext.AssemblyReferences.Select(r => new AssemblyReference
                         {
                             Version = r.AssemblyVersion,
