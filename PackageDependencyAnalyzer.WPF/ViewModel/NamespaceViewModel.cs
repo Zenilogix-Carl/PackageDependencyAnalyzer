@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
@@ -138,7 +139,7 @@ namespace PackageDependencyAnalyzer.ViewModel
                 if (subItem == null)
                 {
                     subItem = new NamespaceViewModel{LocalName = localName};
-                    Namespaces.SortedInsert(subItem, (a,b) => string.Compare(a.DisplayName, b.DisplayName, StringComparison.InvariantCultureIgnoreCase));
+                    Namespaces.SortedInsert(subItem, a => a.DisplayName);
                 }
                 subItem.Insert(project, namespaceParts, baseIndex+1);
             }
