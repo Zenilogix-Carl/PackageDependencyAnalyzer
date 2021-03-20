@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace PackageDependencyAnalysis.Model
 {
@@ -12,7 +12,7 @@ namespace PackageDependencyAnalysis.Model
         /// <param name="collection">Collection to receive inserted item</param>
         /// <param name="item">Item to be inserted</param>
         /// <param name="comparer">Comparer function</param>
-        public static void SortedInsert<T>(this Collection<T> collection, T item, Func<T,T,int> comparer)
+        public static void SortedInsert<T>(this IList<T> collection, T item, Func<T,T,int> comparer)
         {
             collection.Insert(BinarySearch(collection, item, comparer), item);
         }
@@ -27,7 +27,7 @@ namespace PackageDependencyAnalysis.Model
         /// <returns>Returns the index of the item's proper place in the collection; if the item does not occur in the collection
         /// the index will correspond to its appropriate insertion point, which may be after the last existing item
         /// </returns>
-        public static int BinarySearch<T>(this Collection<T> collection, T item, Func<T, T, int> comparer)
+        public static int BinarySearch<T>(this IList<T> collection, T item, Func<T, T, int> comparer)
         {
             // Set up pos to be smallest power of 2 greater than or equal to size of collection
             var pos = 1;
