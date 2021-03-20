@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using PackageDependencyAnalysis.Model;
 using PackageDependencyAnalyzer.ViewModel;
 
@@ -19,6 +21,9 @@ namespace PackageDependencyAnalyzer.Controls
         public SolutionControl()
         {
             InitializeComponent();
+
+            AllProjects.SortBy(nameof(IProject.Name));
+            Projects.RegisterSort(nameof(IProject.Name));
         }
 
         private void AllProjects_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

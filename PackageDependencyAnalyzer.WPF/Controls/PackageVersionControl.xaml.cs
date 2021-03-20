@@ -31,6 +31,12 @@ namespace PackageDependencyAnalyzer.Controls
             };
 
             InitializeComponent();
+
+            Assemblies.RegisterSort(nameof(AssemblyInfo.Name));
+            ReferencingPackages.RegisterSort(nameof(IPackageVersion.Package), nameof(IPackage.Name));
+            ReferencingProjects.RegisterSort(nameof(IProject.Name));
+            ConfigReferences.RegisterSort(nameof(IProject.Name));
+            BindingRedirectReferences.RegisterSort(nameof(IProject.Name));
         }
 
         private void ViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)

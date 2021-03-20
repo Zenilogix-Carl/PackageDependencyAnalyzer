@@ -96,6 +96,7 @@
     <Compile Include="Controls\EditPackageReference.xaml.cs">
       <DependentUpon>EditPackageReference.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ExtensionMethods.cs" />
     <Compile Include="Controls\NamespaceTreeControl.xaml.cs">
       <DependentUpon>NamespaceTreeControl.xaml</DependentUpon>
     </Compile>

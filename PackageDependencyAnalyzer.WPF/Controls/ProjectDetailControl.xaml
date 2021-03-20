@@ -16,7 +16,7 @@
             </WindowsFormsHost>
         </TabItem>
         <TabItem Header="Project References">
-            <ListView ItemsSource="{Binding Projects}">
+            <ListView x:Name="Projects" ItemsSource="{Binding Projects}">
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <EventSetter Event="MouseDoubleClick" Handler="ProjectReferenceDoubleClick" />
@@ -93,7 +93,7 @@
             </Grid>
         </TabItem>
         <TabItem Header="Dependent Projects">
-            <ListView ItemsSource="{Binding Dependencies}">
+            <ListView x:Name="Dependencies" ItemsSource="{Binding Dependencies}">
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <EventSetter Event="MouseDoubleClick" Handler="ProjectReferenceDoubleClick" />

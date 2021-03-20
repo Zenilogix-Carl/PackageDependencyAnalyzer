@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 using PackageDependencyAnalysis.Model;
@@ -30,6 +32,14 @@ namespace PackageDependencyAnalyzer.Controls
             });
 
             InitializeComponent();
+
+            Loaded += (sender, args) =>
+            {
+                Projects.RegisterSort(nameof(IProject.Name));
+                PackageReferences.RegisterSort(nameof(PackageReference.Package), nameof(IPackage.Name));
+                BindingRedirects.RegisterSort(nameof(BindingRedirection.AssemblyName));
+                Dependencies.RegisterSort(nameof(IProject.Name));
+            };
         }
 
         private void PackageReferenceDoubleClick(object sender, MouseButtonEventArgs e)

@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using GalaSoft.MvvmLight.Messaging;
 using PackageDependencyAnalysis.Model;
 using PackageDependencyAnalyzer.ViewModel;
@@ -19,6 +21,10 @@ namespace PackageDependencyAnalyzer.Controls
             InitializeComponent();
 
             Messenger.Default.Register<IPackage>(this, SelectPackage);
+
+            ActiveList.Loaded += (sender, args) => ActiveList.RegisterSort(nameof(IPackage.Name));
+
+            AllList.SortBy(nameof(IPackage.Name));
         }
 
         private void SelectPackage(IPackage package)

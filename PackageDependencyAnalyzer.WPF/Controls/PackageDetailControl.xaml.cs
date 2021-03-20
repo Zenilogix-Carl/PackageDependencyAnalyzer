@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -21,6 +22,13 @@ namespace PackageDependencyAnalyzer.Controls
         public PackageDetailControl()
         {
             InitializeComponent();
+
+            Loaded += (sender, args) =>
+            {
+                VersionsList.RegisterSort(nameof(IPackageVersion.Version), ListSortDirection.Descending);
+                ReferencingPackages.RegisterSort("Value", nameof(IPackageVersion.Package), nameof(IPackage.Name));
+                ReferencingProjects.RegisterSort("Value", nameof(IPackage.Name));
+            };
         }
 
         private void PackageReferenceDoubleClick(object sender, MouseButtonEventArgs e)

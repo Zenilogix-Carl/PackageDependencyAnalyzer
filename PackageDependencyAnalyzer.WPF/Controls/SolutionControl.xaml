@@ -34,7 +34,7 @@
                         <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"/>
                         <Grid Grid.Row="2" Background="LightGray">
                             <TextBlock Foreground="DarkGray" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Text="No Namespace Selected"/>
-                            <ListView  Visibility="{Binding SolutionViewModel.SelectedNamespace, Converter={StaticResource NullToCollapsedConverter}}" ItemsSource="{Binding Path=SolutionViewModel.SelectedNamespace.Projects}" SelectedItem="{Binding SolutionViewModel.ProjectViewModel}" SelectionChanged="NamespaceProjects_OnSelectionChanged">
+                            <ListView x:Name="Projects" Visibility="{Binding SolutionViewModel.SelectedNamespace, Converter={StaticResource NullToCollapsedConverter}}" ItemsSource="{Binding Path=SolutionViewModel.SelectedNamespace.Projects}" SelectedItem="{Binding SolutionViewModel.ProjectViewModel}" SelectionChanged="NamespaceProjects_OnSelectionChanged">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Name}"></TextBlock>

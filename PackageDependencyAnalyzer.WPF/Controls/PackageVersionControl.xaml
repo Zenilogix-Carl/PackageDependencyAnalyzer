@@ -24,7 +24,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Recognized Assemblies:" FontWeight="Bold"></TextBlock>
-                <ListView Grid.Column="0" Margin="0,20,0,0" ItemsSource="{Binding SelectedPackageVersion.Assemblies}" SelectedItem="{Binding SelectedAssemblyInfo}" DisplayMemberPath="Name">
+                <ListView x:Name="Assemblies" Grid.Column="0" Margin="0,20,0,0" ItemsSource="{Binding SelectedPackageVersion.Assemblies}" SelectedItem="{Binding SelectedAssemblyInfo}" DisplayMemberPath="Name">
                 </ListView>
                 <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext"/>
                 <TextBlock Grid.Column="2" Text="Targeted Frameworks:" FontWeight="Bold"></TextBlock>
@@ -54,7 +54,7 @@
             </TreeView>
         </TabItem>
         <TabItem Header="Referenced By Packages" ToolTip="Packages which reference this specific package version">
-            <ListView ItemsSource="{Binding SelectedPackageVersion.ReferencingPackages}" >
+            <ListView x:Name="ReferencingPackages" ItemsSource="{Binding SelectedPackageVersion.ReferencingPackages}" >
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <EventSetter Event="MouseDoubleClick" Handler="PackageReferenceDoubleClick" />
@@ -71,7 +71,7 @@
             </ListView>
         </TabItem>
         <TabItem Header="Referenced By Projects" ToolTip="Projects which reference this specific package version">
-            <ListView ItemsSource="{Binding SelectedPackageVersion.ReferencingProjects}" >
+            <ListView x:Name="ReferencingProjects" ItemsSource="{Binding SelectedPackageVersion.ReferencingProjects}" >
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <EventSetter Event="MouseDoubleClick" Handler="ProjectReferenceDoubleClick" />
@@ -85,7 +85,7 @@
             </ListView>
         </TabItem>
         <TabItem Header="Referenced By Packages Config" ToolTip="Projects which reference this package version via packages.config">
-            <ListView ItemsSource="{Binding SelectedPackageVersion.ConfigReferences}" >
+            <ListView x:Name="ConfigReferences" ItemsSource="{Binding SelectedPackageVersion.ConfigReferences}" >
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <EventSetter Event="MouseDoubleClick" Handler="ProjectReferenceDoubleClick" />
@@ -99,7 +99,7 @@
             </ListView>
         </TabItem>
         <TabItem Header="Referenced By Binding Redirections" ToolTip="Projects which reference this package version via app.config binding redirection">
-            <ListView ItemsSource="{Binding SelectedPackageVersion.BindingRedirectReferences}" >
+            <ListView x:Name="BindingRedirectReferences" ItemsSource="{Binding SelectedPackageVersion.BindingRedirectReferences}" >
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <EventSetter Event="MouseDoubleClick" Handler="ProjectReferenceDoubleClick" />

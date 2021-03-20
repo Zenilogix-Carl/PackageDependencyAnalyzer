@@ -156,6 +156,7 @@
     <Compile Include="ContextObjects\SolutionContext.cs" />
     <Compile Include="Model\AssemblyInfo.cs" />
     <Compile Include="Model\AssemblyReference.cs" />
+    <Compile Include="Model\ExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

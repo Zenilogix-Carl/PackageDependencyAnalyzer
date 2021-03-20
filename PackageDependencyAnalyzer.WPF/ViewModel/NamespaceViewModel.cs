@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Data;
@@ -137,7 +138,7 @@ namespace PackageDependencyAnalyzer.ViewModel
                 if (subItem == null)
                 {
                     subItem = new NamespaceViewModel{LocalName = localName};
-                    Namespaces.Add(subItem);
+                    Namespaces.SortedInsert(subItem, (a,b) => string.Compare(a.DisplayName, b.DisplayName, StringComparison.InvariantCultureIgnoreCase));
                 }
                 subItem.Insert(project, namespaceParts, baseIndex+1);
             }

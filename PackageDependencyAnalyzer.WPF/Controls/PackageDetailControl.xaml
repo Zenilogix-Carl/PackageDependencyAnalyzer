@@ -11,7 +11,7 @@
              DataContext="{Binding  PackageCacheViewModel, Source={StaticResource Locator}}">
     <TabControl x:Name="TabControl">
         <TabItem x:Name="Versions" Header="Versions" ToolTip="All available versions of the selected package">
-            <ListView ItemsSource="{Binding SelectedPackage.PackageVersions}" SelectedItem="{Binding SelectedPackageVersion}">
+            <ListView x:Name="VersionsList" ItemsSource="{Binding SelectedPackage.PackageVersions}" SelectedItem="{Binding SelectedPackageVersion}">
                 <ListView.Resources>
                     <ContextMenu x:Key="PackageVersionContextMenu">
                         <MenuItem Header="Open Repository" Click="OpenRepository_OnClick"/>
@@ -32,7 +32,7 @@
             </ListView>
         </TabItem>
         <TabItem Header="Referenced By Packages" ToolTip="Packages which reference the selected package, regardless of version">
-            <ListView ItemsSource="{Binding SelectedPackage.ReferencingPackages}" >
+            <ListView x:Name="ReferencingPackages" ItemsSource="{Binding SelectedPackage.ReferencingPackages}" >
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <EventSetter Event="MouseDoubleClick" Handler="PackageReferenceDoubleClick" />
@@ -48,7 +48,7 @@
             </ListView>
         </TabItem>
         <TabItem Header="Referenced By Projects" ToolTip="Projects which reference the selected package, regardless of version">
-            <ListView ItemsSource="{Binding SelectedPackage.ReferencingProjects}" >
+            <ListView x:Name="ReferencingProjects" ItemsSource="{Binding SelectedPackage.ReferencingProjects}" >
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <EventSetter Event="MouseDoubleClick" Handler="ProjectReferenceDoubleClick" />
